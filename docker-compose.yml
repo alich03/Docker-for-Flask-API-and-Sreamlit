@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  flask-api:
+    build: ./Flask app  # Flask API's Dockerfile path
+    ports:
+      - "5000:5000"  # Expose Flask API on port 5000
+    networks:
+      - app-network  # Use a custom network to allow communication between containers
+
+  streamlit-app:
+    build: ./Streamlit app  # Streamlit app's Dockerfile path
+    ports:
+      - "8501:8501"  # Expose Streamlit app on port 8501
+    depends_on:
+      - flask-api  # Make sure Flask API starts first
+    networks:
+      - app-network  # Same network to allow communication
+
+networks:
+  app-network:
+    driver: bridge  # Default network driver, allows containers to communicate
